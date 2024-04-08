@@ -317,17 +317,27 @@ app.use('/uploads', express.static(uploadDir));
 
 app.put("/api/updateCraft/:id", upload.none(), (req, res) => {
     const craftIndex = parseInt(req.params.id, 10);
+    console.log("Updating craft at index:", craftIndex);
+    console.log("Received update data:", req.body);
+
     if (craftIndex < 0 || craftIndex >= crafts.length) {
         return res.status(404).send('Craft not found');
     }
 
-    const validationResult = craftSchema.validate(req.body, { convert: false });
+    const validationResult = craftSchema.validate(req.body, { convert: true });
     if (validationResult.error) {
         return res.status(400).send(validationResult.error.details[0].message);
     }
 
-    const updatedCraft = { ...crafts[craftIndex], ...req.body };
+    const updatedCraft = {
+        ...crafts[craftIndex],
+        name: req.body.name,
+        description: req.body.description,
+        supplies: req.body.supplies
+    };
+
     crafts[craftIndex] = updatedCraft;
+    console.log("Updated craft:", updatedCraft);
     res.status(200).send(updatedCraft);
 });
 
