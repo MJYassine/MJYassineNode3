@@ -1,4 +1,4 @@
-let craftsData = []; // This will hold the fetched crafts data
+let craftsData = []; 
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/api/crafts')
@@ -28,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <ul>${craft.supplies.map(supply => `<li>${supply}</li>`).join('')}</ul>
         `;
         modal.style.display = "block";
+        const editBtn = document.querySelector('.edit-btn');
+        editBtn.onclick = function() {
+            showEditModal(index);
+            modal.style.display = "none"; 
+        }
     }
 
     span.onclick = function() {
@@ -43,16 +48,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeEditSpan = document.getElementsByClassName('closeEdit')[0];
 
     window.showEditModal = (index) => {
+        currentCraftIndex = index;
         const craft = craftsData[index];
         document.getElementById('editCraftName').value = craft.name;
         document.getElementById('editCraftDescription').value = craft.description;
+    
+        const suppliesContainer = document.getElementById('editSuppliesContainer');
+        suppliesContainer.innerHTML = '';
+    
+        craft.supplies.forEach(supply => {
+            const supplyInput = document.createElement('input');
+            supplyInput.setAttribute('type', 'text');
+            supplyInput.setAttribute('name', 'editSupplies[]');
+            supplyInput.value = supply;
+    
+            suppliesContainer.appendChild(supplyInput);
+        });
+    
         editModal.style.display = 'block';
-        const editBtn = document.querySelector('.edit-btn');
-        editBtn.onclick = function() {
-            showEditModal(index);
-            modal.style.display = "none";
-        }
-    }
+    };
 
     closeEditSpan.onclick = function() {
         editModal.style.display = 'none';
@@ -90,7 +104,6 @@ document.getElementById('cancelBtn').addEventListener('click', function() {
 
 document.getElementById('addCraftForm').addEventListener('submit', async function(event) {
     event.preventDefault();
-    // Implement form submission logic here...
 });
 
 window.onclick = function(event) {
@@ -98,3 +111,16 @@ window.onclick = function(event) {
         document.getElementById('addCraftModal').style.display = "none";
     }
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('addSupplyBtn').addEventListener('click', function() {
+        console.log('Add Supply button clicked'); 
+
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.name = 'supplies[]';
+        newInput.className = 'supply-input';
+
+        document.getElementById('suppliesContainer').appendChild(newInput);
+    });
+});

@@ -116,3 +116,6 @@ button {
 button:hover {
     opacity: 0.8;
 }
+.supply-input {
+    margin-top: 5px;
+}
