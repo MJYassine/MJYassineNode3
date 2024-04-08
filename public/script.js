@@ -137,11 +137,19 @@ document.getElementById('editCraftForm').addEventListener('submit', function(eve
         body: JSON.stringify(updatedCraft),
     })
     .then(response => {
+        const contentType = response.headers.get('Content-Type');
         if (!response.ok) {
-            return response.json().then(err => Promise.reject(err));
+            if (contentType && contentType.includes('application/json')) {
+                // If the response is JSON, parse it and throw an error
+                return response.json().then(err => Promise.reject(err));
+            } else {
+                // If the response is not JSON, throw a generic error
+                throw new Error('Server error');
+            }
         }
-        return response.json();
+        return response.json(); // Parse successful JSON response
     })
+    
     .then(data => {
         console.log('Success:', data);
         document.getElementById('editCraftModal').style.display = 'none'; 
