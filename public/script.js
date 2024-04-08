@@ -111,16 +111,42 @@ window.onclick = function(event) {
         document.getElementById('addCraftModal').style.display = "none";
     }
 }
+document.getElementById('addEditSupplyBtn').addEventListener('click', function() {
+    const newInput = document.createElement('input');
+    newInput.type = 'text';
+    newInput.name = 'editSupplies[]';
+    newInput.className = 'supply-input';
 
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('addSupplyBtn').addEventListener('click', function() {
-        console.log('Add Supply button clicked'); 
+    const suppliesContainer = document.getElementById('editSuppliesContainer');
+    suppliesContainer.appendChild(newInput);
+});
+document.getElementById('editCraftForm').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
 
-        const newInput = document.createElement('input');
-        newInput.type = 'text';
-        newInput.name = 'supplies[]';
-        newInput.className = 'supply-input';
+    const updatedCraft = {
+        name: document.getElementById('editCraftName').value,
+        description: document.getElementById('editCraftDescription').value,
+        supplies: Array.from(document.querySelectorAll('#editSuppliesContainer input')).map(input => input.value)
+    };
 
-        document.getElementById('suppliesContainer').appendChild(newInput);
+    fetch(`/api/updateCraft/${currentCraftIndex}`, {
+        method: 'PUT', // Use PUT for update operations
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedCraft),
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Success:', data);
+        document.getElementById('editCraftModal').style.display = 'none'; 
+    })
+    .catch((error) => {
+        console.error('Error:', error);
     });
 });

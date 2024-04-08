@@ -315,6 +315,22 @@ app.post("/api/crafts", upload.single('craftImage'), (req, res) => {
 
 app.use('/uploads', express.static(uploadDir));
 
+app.put("/api/updateCraft/:id", upload.none(), (req, res) => {
+    const craftIndex = parseInt(req.params.id, 10);
+    if (craftIndex < 0 || craftIndex >= crafts.length) {
+        return res.status(404).send('Craft not found');
+    }
+
+    const validationResult = craftSchema.validate(req.body, { convert: false });
+    if (validationResult.error) {
+        return res.status(400).send(validationResult.error.details[0].message);
+    }
+
+    const updatedCraft = { ...crafts[craftIndex], ...req.body };
+    crafts[craftIndex] = updatedCraft;
+    res.status(200).send(updatedCraft);
+});
+
 const port = process.env.PORT || 3001;
 app.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
