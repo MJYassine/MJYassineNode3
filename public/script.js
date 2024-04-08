@@ -124,8 +124,8 @@ document.getElementById('editCraftForm').addEventListener('submit', function(eve
     event.preventDefault(); // Prevent the default form submission
 
     const updatedCraft = {
-        name: document.getElementById('editCraftName').value,
-        description: document.getElementById('editCraftDescription').value,
+        craftName: document.getElementById('editCraftName').value,
+        craftDescription: document.getElementById('editCraftDescription').value,
         supplies: Array.from(document.querySelectorAll('#editSuppliesContainer input')).map(input => input.value)
     };
 
@@ -138,15 +138,17 @@ document.getElementById('editCraftForm').addEventListener('submit', function(eve
     })
     .then(response => {
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            return response.json().then(err => Promise.reject(err));
         }
         return response.json();
     })
     .then(data => {
         console.log('Success:', data);
         document.getElementById('editCraftModal').style.display = 'none'; 
+        // Here, you might want to refresh the displayed list of crafts to include the updated information.
     })
     .catch((error) => {
         console.error('Error:', error);
+        // Handle/display error information here
     });
 });
