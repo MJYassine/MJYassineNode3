@@ -39,6 +39,24 @@ document.addEventListener('DOMContentLoaded', () => {
             modal.style.display = "none";
         }
     }
+    const editModal = document.getElementById('editCraftModal');
+    const closeEditSpan = document.getElementsByClassName('closeEdit')[0];
+
+    window.showEditModal = (index) => {
+        const craft = craftsData[index];
+        document.getElementById('editCraftName').value = craft.name;
+        document.getElementById('editCraftDescription').value = craft.description;
+        editModal.style.display = 'block';
+        const editBtn = document.querySelector('.edit-btn');
+        editBtn.onclick = function() {
+            showEditModal(index);
+            modal.style.display = "none";
+        }
+    }
+
+    closeEditSpan.onclick = function() {
+        editModal.style.display = 'none';
+    }
 });
 
 document.getElementById('addCraftBtn').addEventListener('click', function() {

@@ -17,6 +17,9 @@
     <div id="craftModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
+            <br>
+            <button class="edit-btn">Edit</button>
+            <button class="delete-btn">Delete</button>
             <img id="craftImage" src="" alt="Craft Image" style="width:100%">
             <div id="craftInfo"></div>
         </div>
@@ -46,6 +49,29 @@
 
                 <button type="submit">Save</button>
                 <button type="button" id="cancelBtn">Cancel</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editCraftModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="closeEdit">&times;</span>
+            <form id="editCraftForm">
+                <h2>Edit Craft</h2>
+                <label for="editCraftName">Name:</label>
+                <input type="text" id="editCraftName" name="editCraftName" required>
+    
+                <label for="editCraftDescription">Description:</label>
+                <textarea id="editCraftDescription" name="editCraftDescription" required></textarea>
+    
+                <div id="editSuppliesContainer">
+                    <label>Supplies:</label>
+                    <input type="text" name="editSupplies[]" required>
+                </div>
+                <button type="button" id="addEditSupplyBtn">+ Add Supply</button>
+    
+                <button type="submit">Save Changes</button>
+                <button type="button" id="cancelEditBtn">Cancel</button>
             </form>
         </div>
     </div>
